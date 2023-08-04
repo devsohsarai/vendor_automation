@@ -1,0 +1,13 @@
+app:
+  name: "Vendor Automations"
+
+server: 
+  host: "localhost"
+  port: "8080"
+
+db:
+  username: "root"
+  password: "Nodejs@2020"
+  host: "localhost"
+  port: "3306"
+  name: "vendor_automations"
