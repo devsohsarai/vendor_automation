@@ -21,8 +21,30 @@ func New() *Controller {
 
 func (controller *Controller) Index(c *gin.Context) {
 	htmlparse.Render(c, http.StatusOK, "modules/home/html/home", gin.H{
-		"title":    "Welcome to the eSeller360",
-		"featured": controller.articleService.GetFeaturedArticles(),
-		"stories":  controller.articleService.GetStoriesArticles(),
+		"title":      "Welcome to the vendor automation",
+		"featured":   controller.articleService.GetFeaturedArticles(),
+		"stories":    controller.articleService.GetStoriesArticles(),
+		"ActivePage": "home",
+	})
+}
+
+func (controller *Controller) About(c *gin.Context) {
+	htmlparse.Render(c, http.StatusOK, "modules/home/html/about", gin.H{
+		"title":      "About us",
+		"ActivePage": "about",
+	})
+}
+
+func (controller *Controller) Services(c *gin.Context) {
+	htmlparse.Render(c, http.StatusOK, "modules/home/html/services", gin.H{
+		"title":      "Services",
+		"ActivePage": "services",
+	})
+}
+
+func (controller *Controller) Contact(c *gin.Context) {
+	htmlparse.Render(c, http.StatusOK, "modules/home/html/contact", gin.H{
+		"title":      "Conatact",
+		"ActivePage": "contact",
 	})
 }

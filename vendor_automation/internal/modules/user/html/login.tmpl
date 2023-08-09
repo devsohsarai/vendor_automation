@@ -1,40 +1,83 @@
 {{ define "modules/user/html/login" }}
 {{ template "templates/layouts/html/head" .}}
 
-{{ template "templates/layouts/html/nav" .}}
-
 {{ template "templates/layouts/html/header" .}}
+   
 
-<!-- Begin Form
-	================================================== -->
-	<div class="col-md-12 col-md-offset-2 col-xs-12">
-		<div class="auth">
-			<div class="auth-triangle"></div>
+<style>
+  /* Custom style to increase the container width */
+  .custom-container {
+    max-width: 100%;
+    margin: 0 auto; /* Center the container horizontally */
+  }
+	.auth-header {
+    
+    color: #000; /* You can adjust the text color as needed */
+    text-align: left;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px; /* Add some bottom margin to separate the header from the form */
+  }
+</style>
 
-			<h2 class="auth-header">Login</h2>
+<div class="container custom-container  mt-5">
+	  <div class="row">&nbsp;</div>
+		<div class="row justify-content-center">
+        <div class="col-md-9">
+            <div class="auth-header">Login</div>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-md-9">
+            <div class="card">
+                <div class="row">
+                    <!-- Column for the image -->
+                    <div class="col-md-6 d-none d-md-block login-image" style="background-color: #F6F5FC;">
+                        
+                        <img src="/assets/images/login5.png" alt="Login Image" class="img-fluid">
+                    </div>
+                    <!-- Column for the login form -->
+                    <div class="col-md-6">
+                        <div class="card-body">
+                            <!-- Error message (display:none by default) -->
+                            <div class="alert alert-danger mb-3" id="error-message" style="display: none;"></div>
 
-			<form class="auth-container" method="POST" action="/login">
-			
-				<p>
-					<label for="email">Email</label>
-					<input type="email" id="email" name="email" placeholder="Email" value="{{ range .OLD.email }}{{.}}{{ end }}">
-					<span class="text-danger">{{ .ERRORS.email }}</span>
-				</p>
-				<p>
-					<label for="password">Password</label>
-					<input type="password" id="password" name="password" placeholder="Password">
-					<span class="text-danger">{{ .ERRORS.password }}</span>
-				</p>
-				<p><button type="submit">Login</button></p>
-			</form>
-			<p class="text-center">Or <a href="/register">Register</a></p>
-		</div>
-	</div>
-<!-- End Form
-================================================== -->
+                            <form class="auth-container" method="POST" action="/login">
+                                <div class="form-group">
+                                    <label for="email">Email address</label>
+                                    <input type="email" class="form-control{{ if .ERRORS.email }} is-invalid{{ end }}" id="email" name="email" placeholder="Enter email" value="{{ range .OLD.email }}{{.}}{{ end }}">
+                                    <span class="text-danger">{{ .ERRORS.email }}</span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="password">Password</label>
+                                    <input type="password" class="form-control{{ if .ERRORS.password }} is-invalid{{ end }}" id="password" name="password" placeholder="Password">
+                                    <span class="text-danger">{{ .ERRORS.password }}</span>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-block">Login</button>
+                            </form>
+
+                            <div class="mt-3 text-center">
+                                <a href="#" id="forgot-password-link">Forgot Password?</a> | <a href="/register" id="register-link">Register</a>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+		<div class="row">&nbsp;</div>
+		<div class="row">&nbsp;</div>
+		<div class="row">&nbsp;</div>
+</div>
+
+
+
 
 {{ template "templates/layouts/html/footer" .}}
 {{ template "templates/layouts/html/foot" .}}
+
 
 
 

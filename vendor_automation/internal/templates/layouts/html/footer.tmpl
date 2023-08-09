@@ -1,56 +1,47 @@
 {{ define "templates/layouts/html/footer" }}
 	<!--footer section start -->
-    <div class="footer_section layout_padding">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-3 col-sm-6">
-            <h4 class="about_text">About Financial</h4>
-            <div class="location_text"><img src="/assets/images/map-icon.png"><span class="padding_left_15">Locations</span></div>
-            <div class="location_text"><img src="/assets/images/call-icon.png"><span class="padding_left_15">+01 9876543210</span></div>
-            <div class="location_text"><img src="/assets/images/mail-icon.png"><span class="padding_left_15">demo@gmail.com</span></div>
-          </div>
-          <div class="col-lg-3 col-sm-6">
-            <h4 class="about_text">About Financial</h4>
-            <p class="dolor_text">ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt</p>
-          </div>
-          <div class="col-lg-3 col-sm-6">
-            <h4 class="about_text">Instagram</h4>
-            <div class="footer_images">
-              <div class="footer_images_left">
-                <div class="image_12"><img src="/assets/images/img-12.png"></div>
-                <div class="image_12"><img src="/assets/images/img-12.png"></div>
-                <div class="image_12"><img src="/assets/images/img-12.png"></div>
-              </div>
-              <div class="footer_images_right">
-                <div class="image_12"><img src="/assets/images/img-12.png"></div>
-                <div class="image_12"><img src="/assets/images/img-12.png"></div>
-                <div class="image_12"><img src="/assets/images/img-12.png"></div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-3 col-sm-6">
-            <h4 class="about_text">Newsletter</h4>
-            <input type="text" class="mail_text" placeholder="Enter your email" name="Enter your email">
-            <div class="subscribe_bt"><a href="#">Subscribe</a></div>
-            <div class="footer_social_icon">
-              <ul>
-                <li><a href="#"><img src="/assets/images/fb-icon1.png"></a></li>
-                 <li><a href="#"><img src="/assets/images/twitter-icon1.png"></a></li>
-                <li><a href="#"><img src="/assets/images/linkedin-icon1.png"></a></li>
-                <li><a href="#"><img src="/assets/images/youtub-icon1.png"></a></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <!-- copyright section start -->
-        <div class="copyright_section">
-          <div class="copyright_text">Copyright 2023 All Right Reserved By <a href="#">{{ .APP_NAME }}</a></div>
-        </div>
-        <!-- copyright section end -->
-      </div>
-    </div>
-    <!--footer section end -->
+    <footer class="page-footer bg-image" style="background-image: url(../assets/img/world_pattern.svg);">
+    <div class="container">
+      <div class="row mb-5">
+        <div class="col-lg-3 py-3">
+          <h3>SEOGram</h3>
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero amet, repellendus eius blanditiis in iusto eligendi iure.</p>
 
-</div>
-<!-- /.container -->
+          <div class="social-media-button">
+            <a href="#"><span class="mai-logo-facebook-f"></span></a>
+            <a href="#"><span class="mai-logo-twitter"></span></a>
+            <a href="#"><span class="mai-logo-google-plus-g"></span></a>
+            <a href="#"><span class="mai-logo-instagram"></span></a>
+            <a href="#"><span class="mai-logo-youtube"></span></a>
+          </div>
+        </div>
+        <div class="col-lg-3 py-3">
+          <h5>Company</h5>
+          <ul class="footer-menu">
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Career</a></li>
+            <li><a href="#">Advertise</a></li>
+            <li><a href="#">Terms of Service</a></li>
+            <li><a href="#">Help & Support</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-3 py-3">
+          <h5>Contact Us</h5>
+          <p>203 Fake St. Mountain View, San Francisco, California, USA</p>
+          <a href="#" class="footer-link">+00 1122 3344 5566</a>
+          <a href="#" class="footer-link">support@eseller360.com</a>
+        </div>
+        <div class="col-lg-3 py-3">
+          <h5>Newsletter</h5>
+          <p>Get updates, news or events on your mail.</p>
+          <form action="#">
+            <input type="text" class="form-control" placeholder="Enter your email..">
+            <button type="submit" class="btn btn-success btn-block mt-2">Subscribe</button>
+          </form>
+        </div>
+      </div>
+
+      <p class="text-center" id="copyright">Copyright &copy; 2023. develop by <a href="https://shantiai.com/" target="_blank">Shanti IT Services</a></p>
+    </div>
+  </footer>
 {{ end }}

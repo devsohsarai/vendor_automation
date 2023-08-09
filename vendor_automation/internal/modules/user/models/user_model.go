@@ -9,4 +9,5 @@ type User struct {
 	Name     string `gorm:"varchar:191"`
 	Email    string `gorm:"varchar:191"`
 	Password string `gorm:"varchar:191"`
+	Contact  string `gorm:"varchar:20"`
 }

@@ -19,7 +19,7 @@ func Seed() {
 		return
 	}
 
-	user := userModel.User{Name: "random name", Email: "randomuser@gmail.com", Password: string(hashPassword)}
+	user := userModel.User{Name: "random name", Email: "randomuser@gmail.com", Password: string(hashPassword), Contact: "9930319931"}
 
 	db.Create(&user) // pass pointer of data to Create
 

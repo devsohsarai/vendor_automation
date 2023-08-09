@@ -8,4 +8,7 @@ import (
 func Routes(router *gin.Engine) {
 	homeController := homeCtrl.New()
 	router.GET("/", homeController.Index)
+	router.GET("/about", homeController.About)
+	router.GET("/services", homeController.Services)
+	router.GET("/contact", homeController.Contact)
 }

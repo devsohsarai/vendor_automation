@@ -7,6 +7,7 @@ import (
 	UserRepository "github.com/gowaves/vendor_automation/internal/modules/user/repositories"
 	"github.com/gowaves/vendor_automation/internal/modules/user/requests/auth"
 	UserResponse "github.com/gowaves/vendor_automation/internal/modules/user/responses"
+	"github.com/mitchellh/mapstructure"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -29,8 +30,20 @@ func (userService *UserService) Create(request auth.RegisterRequest) (UserRespon
 		return response, errors.New("error hashing the password")
 	}
 
-	user.Name = request.Name
-	user.Email = request.Email
+	//Start the mapping code here
+	decoder, err := mapstructure.NewDecoder(&mapstructure.DecoderConfig{
+		Result:  &user,
+		TagName: "form", // Use the appropriate struct tag (e.g., json or form)
+	})
+
+	if err != nil {
+		return response, err
+	}
+
+	if err := decoder.Decode(request); err != nil {
+		return response, err
+	}
+
 	user.Password = string(hashedPassword)
 
 	newuser := userService.userRepository.Create(user)

@@ -1,45 +1,61 @@
 {{ define "templates/layouts/html/header" }}
-  <div class="header_section">
-      <div class="header_left">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-          <div class="logo"><a href="index.html"><img src="/assets/images/logo.png"></a></div>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-              <li class="nav-item">
-                <a class="nav-link" href="index.html">Home</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="about.html">About</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="services.html">Services</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="team.html">Team</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="contact.html">Contact Us</a>
-              </li>
-            </ul>
-          </div>
-        </nav>
-        <div class="banner_main">
-          <h1 class="banner_taital">Vendor <br>Automation</h1>
-          <p class="banner_text">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever </p>
-          <div class="btn_main">
-            <div class="more_bt"><a href="#">Read More </a></div>
-            <div class="contact_bt"><a href="#">Contact Us</a></div>
-          </div>
-        </div>
-      </div>
-      <div class="header_right">
-        <img src="/assets/images/banner-img.png" class="banner_img">
-      </div>
-    </div>
-    <!--header section end -->
+<style>
+        .login-header {
+            background-color: #F6F5FC;
+        }
+    </style>
+<body>
+ <!-- Back to top button -->
+  <div class="back-to-top"></div>
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white sticky" data-offset="500">
+      <div class="container">
+        <a href="#" class="navbar-brand">Vendor<span class="text-primary">Automation.</span></a>
+
+      <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+       <div class="navbar-collapse collapse" id="navbarContent">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item{{ if eq .ActivePage "home" }} active{{ end }}">
+                <a class="nav-link" href="/">Home</a>
+            </li>
+            <li class="nav-item{{ if eq .ActivePage "about" }} active{{ end }}">
+                <a class="nav-link" href="/about">About</a>
+            </li>
+            <li class="nav-item{{ if eq .ActivePage "services" }} active{{ end }}">
+                <a class="nav-link" href="/services">Services</a>
+            </li>
+            <li class="nav-item{{ if eq .ActivePage "contact" }} active{{ end }}">
+                <a class="nav-link" href="/contact">Contact</a>
+            </li>
+            {{ if (eq .AUTH.ID 0 ) }}
+            <li class="nav-item">
+                <a class="btn btn-primary ml-lg-2" href="/login">Login</a>
+            </li>
+            {{ else }}	
+           <li class="nav-item{{ if eq .ActivePage "dashboard" }} active{{ end }}">
+            <div class="dropdown">
+                <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+                    {{ .AUTH.Name}}
+                </a>
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li class="nav-item">
+                        <a href="#" onclick="$('#logout').submit()">
+                            &nbsp;Logout
+                            <form action="/logout" method="POST" id="logout"></form>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+          </li>
 
 
+            
+           {{ end }}
+        </ul>
+      </div>
+      </div>
+    </nav>
+  </header>
 {{ end }}
