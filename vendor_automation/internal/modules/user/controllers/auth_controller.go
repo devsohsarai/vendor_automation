@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -23,6 +24,17 @@ func New() *Controller {
 	return &Controller{
 		userService: UserService.New(),
 	}
+}
+
+/*
+Create new company for grow the business.
+Parameters:
+  - c (*gin.Context): The Gin context object for handling HTTP requests and responses.
+*/
+func (controller *Controller) Company(c *gin.Context) {
+	htmlparse.Render(c, http.StatusOK, "modules/user/html/company", gin.H{
+		"title": "Company",
+	})
 }
 
 /*
@@ -77,11 +89,12 @@ func (controller *Controller) HandleRegister(c *gin.Context) {
 
 	//Check if there is any error on the user page
 	if err != nil {
+		fmt.Println("Hi here is the error", err)
 		c.Redirect(http.StatusFound, "/register")
 		return
 	}
 
-	sessions.Set(c, "auth", strconv.Itoa(int(user.ID)))
+	//sessions.Set(c, "auth", strconv.Itoa(int(user.ID)))
 
 	// after creating the user redirect to the home page
 	log.Printf("The user created successfully with a name %s \n", user.Name)

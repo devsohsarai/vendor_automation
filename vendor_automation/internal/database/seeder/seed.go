@@ -18,8 +18,10 @@ func Seed() {
 		log.Fatal("hash password error")
 		return
 	}
+	company := userModel.Company{Name: "Amber Sports", Email: "amber@yahoo.com", Contact: "9930319945", Address: "Cypress Texas", Status: true}
+	db.Create(&company)
 
-	user := userModel.User{Name: "random name", Email: "randomuser@gmail.com", Password: string(hashPassword), Contact: "9930319931"}
+	user := userModel.User{Name: "random name", Email: "randomuser@gmail.com", Password: string(hashPassword), Contact: "9930319931", IsAdmin: false, CompanyID: company.ID}
 
 	db.Create(&user) // pass pointer of data to Create
 

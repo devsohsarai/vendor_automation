@@ -12,10 +12,6 @@ func Routes(router *gin.Engine) {
 	guestGroup := router.Group("/")
 	guestGroup.Use(middlewares.IsGuest())
 	{
-		//Register
-		guestGroup.GET("/register", userController.Register)
-		guestGroup.POST("/register", userController.HandleRegister)
-
 		//Login
 		guestGroup.GET("/login", userController.Login)
 		guestGroup.POST("/login", userController.HandleLogin)
@@ -26,6 +22,12 @@ func Routes(router *gin.Engine) {
 	{
 		//Logout
 		router.POST("/logout", userController.HandleLogout)
+		//Register
+		authGroup.GET("/register", userController.Register)
+		authGroup.POST("/register", userController.HandleRegister)
+
+		//Company
+		authGroup.GET("/company", userController.Company)
 	}
 
 }

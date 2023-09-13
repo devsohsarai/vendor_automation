@@ -40,12 +40,20 @@
                     {{ .AUTH.Name}}
                 </a>
                 <ul class="dropdown-menu dropdown-menu-right">
+                   <li class="nav-item">
+                        <a href="/company">&nbsp;Company</a>
+                    </li> 
+                    <li class="nav-item">
+                        <a href="/register">&nbsp;Manage Team</a>
+                    </li>
                     <li class="nav-item">
                         <a href="#" onclick="$('#logout').submit()">
                             &nbsp;Logout
                             <form action="/logout" method="POST" id="logout"></form>
                         </a>
                     </li>
+                   
+
                 </ul>
             </div>
           </li>
