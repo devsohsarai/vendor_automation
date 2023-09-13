@@ -11,6 +11,12 @@ import (
 )
 
 func Seed() {
+	// 1 FFFFF[Access key]YYYYYYYTYRTYR : "Test-DATA10001[AKIAUCJATANCNHUXX3YV]||jjjjj}}}-Test DATA"
+	// 2 Secret access key : "Test-Data237877474$5785@#$$[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]784735juyhgjaf"
+	// 3 ARNO :  "TETSTSSTTSTST%%$$#$#$(36383hjehfdbbkfa)[arn1234:aws1234:iam1234::279778100036:user/eSeller]||jjjjj}}}-Test DATA"
+	//4 RT :Atzr|IwEBIChEgTyWiMBhVZIf2WD_HgklKztN-QsrQMkeZluv3GsArq1LaVEVbNpVlQiLxawm8p_wHfIVbD5OJeMqeYU7GyE852sPXTLoRbylV21iOh6pt692Wo41r7l9zdouEqsId12IfooPaaNskvgJqGsR12j55CZ3RquKYkLljZ-mC41-FsPxhy1b0_yS4jbavvrzoIsIi5n_OtRIm0lxp4Y4V-ROSEPQZP0mTmDWtELWDxdgCgdozGRLHumuVsiVfUyRnFvWhtPGysZmWL6dn6thN4VL6txAF8LnW3CXz9_M8x0MnnOULhhSaIYvJyPiEkS9izU
+	//CID :  TETSTSSTTSTST%%$$#$#$(36383hjehfdbbkfa)[amzn1.application-oa2-client.2e97989e6029401bbb9a55976f125c2a]TETSTSSTTSTST%%$$#$#$(36383hjehfdbbkfa)
+	//CSecret:  TETSTSSTTSTST%%$$#$#$(36383hjehfdbbkfa)[amzn1.oa2-cs.v1.8b9a50bf2f857558f599f8cfd4428a160f8cf7646f6eb2223d36572ac940f6bf]TETSTSSTTSTST%%$$#$#$(36383hjehfdbbkfa)
 	db := database.Connection()
 
 	hashPassword, err := bcrypt.GenerateFromPassword([]byte("Secret"), 12)
