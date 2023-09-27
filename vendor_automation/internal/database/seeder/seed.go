@@ -19,15 +19,28 @@ func Seed() {
 	//CSecret:  TETSTSSTTSTST%%$$#$#$(36383hjehfdbbkfa)[amzn1.oa2-cs.v1.8b9a50bf2f857558f599f8cfd4428a160f8cf7646f6eb2223d36572ac940f6bf]TETSTSSTTSTST%%$$#$#$(36383hjehfdbbkfa)
 	db := database.Connection()
 
-	hashPassword, err := bcrypt.GenerateFromPassword([]byte("Secret"), 12)
+	hashPassword, err := bcrypt.GenerateFromPassword([]byte("ravinesh1234"), 12)
 	if err != nil {
 		log.Fatal("hash password error")
 		return
 	}
-	company := userModel.Company{Name: "Amber Sports", Email: "amber@yahoo.com", Contact: "9930319945", Address: "Cypress Texas", Status: true}
+	company := userModel.Company{
+		Name:    "Shanti Digital",
+		Email:   "info@shantidigital.com",
+		Contact: "9930319945",
+		Address: "Cypress Texas",
+		Status:  true,
+	}
 	db.Create(&company)
 
-	user := userModel.User{Name: "random name", Email: "randomuser@gmail.com", Password: string(hashPassword), Contact: "9930319931", IsAdmin: false, CompanyID: company.ID}
+	user := userModel.User{
+		Name:      "Viart  Arsh",
+		Email:     "virat@gmail.com",
+		Password:  string(hashPassword),
+		Contact:   "9930319931",
+		IsAdmin:   true,
+		CompanyID: company.ID,
+	}
 
 	db.Create(&user) // pass pointer of data to Create
 

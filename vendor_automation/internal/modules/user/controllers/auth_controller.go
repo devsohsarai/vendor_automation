@@ -8,6 +8,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/gowaves/vendor_automation/internal/modules/user/requests/auth"
+
 	UserService "github.com/gowaves/vendor_automation/internal/modules/user/services"
 	"github.com/gowaves/vendor_automation/pkg/converters"
 	"github.com/gowaves/vendor_automation/pkg/errors"
@@ -17,12 +18,14 @@ import (
 )
 
 type Controller struct {
-	userService UserService.UserServiceInterface
+	userService    UserService.UserServiceInterface
+	companyService UserService.CompanyServiceInterface
 }
 
 func New() *Controller {
 	return &Controller{
-		userService: UserService.New(),
+		userService:    UserService.New(),
+		companyService: UserService.NewCompany(),
 	}
 }
 
@@ -38,11 +41,62 @@ func (controller *Controller) Company(c *gin.Context) {
 }
 
 /*
+HandleCompany handles the company  process based on the provided request.
+Parameters:
+  - c (*gin.Context): The Gin context object representing the HTTP request and response.
+*/
+func (controller *Controller) HandleCompany(c *gin.Context) {
+	// validate the request
+	var request auth.CompanyRequest
+
+	// This will infer what binder to use depending on the content-type header.
+	if err := c.ShouldBind(&request); err != nil {
+		errors.Init()
+		errors.SetFromErrors(err)
+		sessions.Set(c, "errors", converters.MapToString(errors.Get()))
+
+		old.Init()
+		old.Set(c)
+		sessions.Set(c, "old", converters.UrlValuesToString(old.Get()))
+
+		c.Redirect(http.StatusFound, "/company")
+		return
+	}
+
+	if controller.companyService.CheckCompanyExists(request.Email) {
+		errors.Init()
+		errors.Add("Email", "Company Emailaddress already exists!")
+		sessions.Set(c, "errors", converters.MapToString(errors.Get()))
+
+		old.Init()
+		old.Set(c)
+		sessions.Set(c, "old", converters.UrlValuesToString(old.Get()))
+
+		c.Redirect(http.StatusFound, "/company")
+		return
+	}
+
+	//create the user
+	company, err := controller.companyService.Create(request)
+
+	//Check if there is any error on the user page
+	if err != nil {
+		c.Redirect(http.StatusFound, "/company")
+		return
+	}
+
+	// after creating the user redirect to the home page
+	log.Printf("The company created successfully with a name %s \n", company.Name)
+	c.Redirect(http.StatusFound, "/")
+}
+
+/*
 Register handles user registration by rendering the "register" template.
 Parameters:
   - c (*gin.Context): The Gin context object for handling HTTP requests and responses.
 */
 func (controller *Controller) Register(c *gin.Context) {
+
 	htmlparse.Render(c, http.StatusOK, "modules/user/html/register", gin.H{
 		"title": "Register",
 	})
@@ -56,6 +110,23 @@ Parameters:
 func (controller *Controller) HandleRegister(c *gin.Context) {
 	// validate the request
 	var request auth.RegisterRequest
+
+	//Set the company ID
+	companyIDStr := sessions.Get(c, "company_ids")
+	companyIDUint64, err := strconv.ParseUint(companyIDStr, 10, 16)
+	companyID := uint16(companyIDUint64)
+
+	if err != nil {
+		errors.Init()
+		errors.Add("Name", err.Error())
+		sessions.Set(c, "errors", converters.MapToString(errors.Get()))
+
+		old.Init()
+		old.Set(c)
+		sessions.Set(c, "old", converters.UrlValuesToString(old.Get()))
+		c.Redirect(http.StatusFound, "/register")
+		return
+	}
 
 	// This will infer what binder to use depending on the content-type header.
 	if err := c.ShouldBind(&request); err != nil {
@@ -83,8 +154,7 @@ func (controller *Controller) HandleRegister(c *gin.Context) {
 		c.Redirect(http.StatusFound, "/register")
 		return
 	}
-
-	//create the user
+	request.CompanyID = companyID
 	user, err := controller.userService.Create(request)
 
 	//Check if there is any error on the user page
@@ -144,6 +214,8 @@ func (controller *Controller) HandleLogin(c *gin.Context) {
 		return
 	}
 	sessions.Set(c, "auth", strconv.Itoa(int(user.ID)))
+	sessions.Set(c, "company_id", strconv.Itoa(int(user.CompanyID)))
+
 	log.Printf("The user logged in successfully with a name %s \n", user.Name)
 	c.Redirect(http.StatusFound, "/")
 }

@@ -45,7 +45,7 @@ func (userService *UserService) Create(request auth.RegisterRequest) (UserRespon
 	}
 
 	user.Password = string(hashedPassword)
-	user.CompanyID = 1
+	//user.CompanyID = sessions.Get(CompanyID)
 
 	newuser := userService.userRepository.Create(user)
 	if newuser.ID == 0 {

@@ -29,6 +29,9 @@
             <li class="nav-item{{ if eq .ActivePage "contact" }} active{{ end }}">
                 <a class="nav-link" href="/contact">Contact</a>
             </li>
+            <li class="nav-item">
+              <a href="/company">&nbsp;Seller Registration</a>
+            </li> 
             {{ if (eq .AUTH.ID 0 ) }}
             <li class="nav-item">
                 <a class="btn btn-primary ml-lg-2" href="/login">Login</a>
@@ -40,9 +43,6 @@
                     {{ .AUTH.Name}}
                 </a>
                 <ul class="dropdown-menu dropdown-menu-right">
-                   <li class="nav-item">
-                        <a href="/company">&nbsp;Company</a>
-                    </li> 
                     <li class="nav-item">
                         <a href="/register">&nbsp;Manage Team</a>
                     </li>

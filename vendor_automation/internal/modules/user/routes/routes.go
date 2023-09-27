@@ -15,6 +15,9 @@ func Routes(router *gin.Engine) {
 		//Login
 		guestGroup.GET("/login", userController.Login)
 		guestGroup.POST("/login", userController.HandleLogin)
+		//Company
+		guestGroup.GET("/company", userController.Company)
+		guestGroup.POST("/company", userController.HandleCompany)
 	}
 
 	authGroup := router.Group("/")
@@ -25,9 +28,6 @@ func Routes(router *gin.Engine) {
 		//Register
 		authGroup.GET("/register", userController.Register)
 		authGroup.POST("/register", userController.HandleRegister)
-
-		//Company
-		authGroup.GET("/company", userController.Company)
 	}
 
 }

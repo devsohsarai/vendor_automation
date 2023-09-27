@@ -7,11 +7,13 @@ import (
 )
 
 type User struct {
-	ID      uint
-	Image   string
-	Name    string
-	Email   string
-	Contact string
+	ID        uint
+	Image     string
+	Name      string
+	Email     string
+	Contact   string
+	IsAdmin   bool
+	CompanyID uint16
 }
 
 type Users struct {
@@ -20,10 +22,12 @@ type Users struct {
 
 func ToUser(user UserModel.User) User {
 	return User{
-		ID:      user.ID,
-		Name:    user.Name,
-		Email:   user.Email,
-		Contact: user.Contact,
-		Image:   fmt.Sprintf("https://ui-avatars.com/api/?name=%s", user.Name),
+		ID:        user.ID,
+		Name:      user.Name,
+		Email:     user.Email,
+		Contact:   user.Contact,
+		Image:     fmt.Sprintf("https://ui-avatars.com/api/?name=%s", user.Name),
+		IsAdmin:   user.IsAdmin,
+		CompanyID: user.CompanyID,
 	}
 }
