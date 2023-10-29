@@ -1,15 +1,11 @@
 package routes
 
-import (
-	"github.com/gofiber/fiber/v2"
-	"github.com/gowaves/order_automaiton/controllers"
-)
-
-func UserRoute(app *fiber.App) {
+/*func UserRoute(group fiber.Router, jwtMiddleware fiber.Handler) {
 	//All routes related to users comes here
-	app.Post("/user", controllers.CreateUser)
-	app.Get("/user/:userId", controllers.GetAUser)
-	app.Put("/user/:userId", controllers.EditAUser)
-	app.Delete("/user/:userId", controllers.DeleteAUser)
-	app.Get("/users", controllers.GetAllUsers)
-}
+	// group.Post("/user/login", controllers.Login)
+	// group.Post("/user", controllers.CreateUser)
+	// group.Get("/user/:userId", jwtMiddleware, controllers.GetAUser)
+	// group.Put("/user/:userId", controllers.EditAUser)
+	// group.Delete("/user/:userId", jwtMiddleware, controllers.DeleteAUser)
+	// group.Get("/users", controllers.GetAllUsers)
+}*/

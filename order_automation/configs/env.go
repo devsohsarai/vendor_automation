@@ -14,3 +14,11 @@ func EnvMongoURI() string {
 
 	return os.Getenv("MONGOURI")
 }
+
+func Secret() string {
+	return os.Getenv("SECRET")
+}
+
+func DbMongo() string {
+	return os.Getenv("DB_MONGO")
+}

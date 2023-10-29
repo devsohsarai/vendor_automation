@@ -8,24 +8,25 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func ConnectDB() *mongo.Client {
+// var (
+// 	databaseName = DbMongo()
+// )
 
-	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(EnvMongoURI()))
+func ConnectDB() *mongo.Client {
+	clientOptions := options.Client().ApplyURI(EnvMongoURI())
+	client, err := mongo.Connect(context.Background(), clientOptions)
 	if err != nil {
 		panic(err)
 	}
-	defer func() {
-		if err := client.Disconnect(context.TODO()); err != nil {
-			panic(err.Error())
-		}
-	}()
 
-	// Ping the database
-	err = client.Ping(context.TODO(), nil) // Corrected line
+	// Ping the database to establish a connection
+	err = client.Ping(context.Background(), nil)
 	if err != nil {
-		panic(err.Error())
+		panic(err)
 	}
+
 	fmt.Println("Connected to MongoDB")
+
 	return client
 }
 
@@ -34,6 +35,13 @@ var DB *mongo.Client = ConnectDB()
 
 // getting database collections
 func GetCollection(client *mongo.Client, collectionName string) *mongo.Collection {
-	collection := client.Database("testfiber").Collection(collectionName)
+	collection := client.Database(DbMongo()).Collection(collectionName)
 	return collection
+}
+
+func DisconnectDB() {
+	if err := DB.Disconnect(context.Background()); err != nil {
+		panic(err.Error())
+	}
+	fmt.Println("Connection has disconnect!")
 }
