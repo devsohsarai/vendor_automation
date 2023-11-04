@@ -40,9 +40,10 @@ func main() {
 	// Define a middleware
 	companyCodeMiddleware := middleware.CompanyCodeMiddleware(companySecretKeys)
 	jwtMiddleware := middleware.JwtMiddleware()
+	authorizeMiddleware := middleware.AuthorizationMiddleware()
 
 	//routes with middleware
-	routes.CompanyRoute(v1Group, jwtMiddleware, companyCodeMiddleware)
+	routes.CompanyRoute(v1Group, jwtMiddleware, companyCodeMiddleware, authorizeMiddleware)
 
 	// Defer the disconnect and handle errors gracefully
 	defer func() {

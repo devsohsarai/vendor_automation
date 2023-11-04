@@ -1,8 +1,13 @@
 package middleware
 
 import (
+	"fmt"
+	"net/http"
+
 	jwtware "github.com/gofiber/contrib/jwt"
 	"github.com/gofiber/fiber/v2"
+	"github.com/golang-jwt/jwt"
+	"github.com/gowaves/order_automaiton/responses"
 	"github.com/gowaves/order_automaiton/utils"
 )
 
@@ -47,5 +52,49 @@ func JwtMiddleware() func(*fiber.Ctx) error {
 	return func(c *fiber.Ctx) error {
 		secretKey := c.Locals("secretKey").(string)
 		return AuthMiddleWare(secretKey)(c)
+	}
+}
+
+/**
+ * AuthorizationMiddleware returns a Fiber middleware function that checks user authorization based on 'comp_code' in the JWT token.
+ */
+func AuthorizationMiddleware() func(*fiber.Ctx) error {
+	return func(c *fiber.Ctx) error {
+		tokenValue := c.Locals("user")
+
+		if token, ok := tokenValue.(*jwt.Token); ok {
+			fmt.Println(token)
+			fmt.Println(ok)
+			compCode := c.Query("comp_code")
+			claims := token.Claims.(jwt.MapClaims)
+			if comp_code := claims["comp_code"]; comp_code != compCode {
+				return c.Status(http.StatusUnauthorized).JSON(responses.AppResponse{
+					Status:  http.StatusUnauthorized,
+					Message: "Error",
+					Data:    &fiber.Map{"data": "You are not authorized to access the other vendor details"},
+				})
+			}
+		}
+
+		/*claims := token.Claims.(jwt.MapClaims)
+		compCodeFromToken, exists := claims["comp_code"]
+		if !exists {
+			return c.Status(http.StatusUnauthorized).JSON(responses.AppResponse{
+				Status:  http.StatusUnauthorized,
+				Message: "Error",
+				Data:    &fiber.Map{"data": "Claim 'comp_code' not found in the token"},
+			})
+		}
+
+		compCodeFromParam := c.Params("comp_code")
+		if compCodeFromToken != compCodeFromParam {
+			return c.Status(http.StatusUnauthorized).JSON(responses.AppResponse{
+				Status:  http.StatusUnauthorized,
+				Message: "Error",
+				Data:    &fiber.Map{"data": "You are not authorized to access the other vendor details"},
+			})
+		}*/
+
+		return c.Next()
 	}
 }

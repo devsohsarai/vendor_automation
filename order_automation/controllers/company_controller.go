@@ -32,7 +32,7 @@ func AuthProcess(c *fiber.Ctx) error {
 
 	// Parse the login request
 	if err := c.BodyParser(&authRequest); err != nil {
-		return c.Status(http.StatusBadRequest).JSON(responses.UserResponse{
+		return c.Status(http.StatusBadRequest).JSON(responses.AppResponse{
 			Status:  http.StatusBadRequest,
 			Message: "error",
 			Data:    &fiber.Map{"data": err.Error()},
@@ -49,7 +49,7 @@ func AuthProcess(c *fiber.Ctx) error {
 	// Attempt to find a document matching both conditions
 	err := companyCollection.FindOne(ctx, filter).Decode(&company)
 	if err != nil {
-		return c.Status(http.StatusUnauthorized).JSON(responses.UserResponse{
+		return c.Status(http.StatusUnauthorized).JSON(responses.AppResponse{
 			Status:  http.StatusUnauthorized,
 			Message: "error",
 			Data:    &fiber.Map{"data": "Invalid client_id or client_secret"},
@@ -77,14 +77,14 @@ func AuthProcess(c *fiber.Ctx) error {
 	// Generate encoded token and send it as response.
 	tokenString, err := token.SignedString([]byte(secretKey))
 	if err != nil {
-		return c.Status(http.StatusInternalServerError).JSON(responses.UserResponse{
+		return c.Status(http.StatusInternalServerError).JSON(responses.AppResponse{
 			Status:  http.StatusInternalServerError,
 			Message: "error",
 			Data:    &fiber.Map{"data": err.Error()},
 		})
 	}
 
-	return c.Status(http.StatusOK).JSON(responses.UserResponse{
+	return c.Status(http.StatusOK).JSON(responses.AppResponse{
 		Status:  http.StatusOK,
 		Message: "success",
 		Data: &fiber.Map{
@@ -102,7 +102,7 @@ func CreateCompany(c *fiber.Ctx) error {
 	//validate the request body
 	var company models.Company
 	if err := c.BodyParser(&company); err != nil {
-		return c.Status(http.StatusBadRequest).JSON(responses.UserResponse{
+		return c.Status(http.StatusBadRequest).JSON(responses.AppResponse{
 			Status:  http.StatusBadRequest,
 			Message: "error",
 			Data:    &fiber.Map{"data": err.Error()},
@@ -111,13 +111,13 @@ func CreateCompany(c *fiber.Ctx) error {
 
 	//use the validator library to validate required fields
 	if validationErr := validate.Struct(&company); validationErr != nil {
-		return c.Status(http.StatusBadRequest).JSON(responses.UserResponse{Status: http.StatusBadRequest, Message: "error", Data: &fiber.Map{"data": validationErr.Error()}})
+		return c.Status(http.StatusBadRequest).JSON(responses.AppResponse{Status: http.StatusBadRequest, Message: "error", Data: &fiber.Map{"data": validationErr.Error()}})
 	}
 
 	clientId, clientSecret, err := utils.GenerateClientCredentials()
 
 	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(responses.UserResponse{Status: http.StatusBadRequest, Message: "error", Data: &fiber.Map{"data": err.Error()}})
+		return c.Status(http.StatusBadRequest).JSON(responses.AppResponse{Status: http.StatusBadRequest, Message: "error", Data: &fiber.Map{"data": err.Error()}})
 	}
 
 	newCompany := models.Company{
@@ -134,7 +134,7 @@ func CreateCompany(c *fiber.Ctx) error {
 	// Check if a document with the same mobile number already exists
 	existingDocument := companyCollection.FindOne(ctx, bson.M{"mobile": newCompany.Mobile})
 	if existingDocument.Err() == nil {
-		return c.Status(http.StatusBadRequest).JSON(responses.UserResponse{
+		return c.Status(http.StatusBadRequest).JSON(responses.AppResponse{
 			Status:  http.StatusBadRequest,
 			Message: "error",
 			Data:    &fiber.Map{"data": "Company already exists"},
@@ -143,10 +143,10 @@ func CreateCompany(c *fiber.Ctx) error {
 
 	result, err := companyCollection.InsertOne(ctx, newCompany)
 	if err != nil {
-		return c.Status(http.StatusInternalServerError).JSON(responses.UserResponse{Status: http.StatusInternalServerError, Message: "error", Data: &fiber.Map{"data": err.Error()}})
+		return c.Status(http.StatusInternalServerError).JSON(responses.AppResponse{Status: http.StatusInternalServerError, Message: "error", Data: &fiber.Map{"data": err.Error()}})
 	}
 
-	return c.Status(http.StatusCreated).JSON(responses.UserResponse{Status: http.StatusCreated, Message: "success", Data: &fiber.Map{"data": result}})
+	return c.Status(http.StatusCreated).JSON(responses.AppResponse{Status: http.StatusCreated, Message: "success", Data: &fiber.Map{"data": result}})
 }
 
 func GetAllCompanies(c *fiber.Ctx) error {
@@ -156,7 +156,7 @@ func GetAllCompanies(c *fiber.Ctx) error {
 	// Use the Find method with no filter to get all companies
 	results, err := companyCollection.Find(ctx, bson.M{})
 	if err != nil {
-		return c.Status(http.StatusInternalServerError).JSON(responses.UserResponse{
+		return c.Status(http.StatusInternalServerError).JSON(responses.AppResponse{
 			Status:  http.StatusInternalServerError,
 			Message: "error",
 			Data:    &fiber.Map{"data": err.Error()},
@@ -169,7 +169,7 @@ func GetAllCompanies(c *fiber.Ctx) error {
 	for results.Next(ctx) {
 		var singleCompany models.Company
 		if err := results.Decode(&singleCompany); err != nil {
-			return c.Status(http.StatusInternalServerError).JSON(responses.UserResponse{
+			return c.Status(http.StatusInternalServerError).JSON(responses.AppResponse{
 				Status:  http.StatusInternalServerError,
 				Message: "error",
 				Data:    &fiber.Map{"data": err.Error()},
@@ -178,10 +178,63 @@ func GetAllCompanies(c *fiber.Ctx) error {
 		companies = append(companies, singleCompany)
 	}
 
-	return c.Status(http.StatusOK).JSON(responses.UserResponse{
+	return c.Status(http.StatusOK).JSON(responses.AppResponse{
 		Status:  http.StatusOK,
 		Message: "success",
 		Data:    &fiber.Map{"data": companies},
+	})
+}
+
+/*
+GetACompany retrieves company information based on the provided comp_code.
+It uses Fiber's context to fetch and return the company details in JSON format.
+*/
+func GetACompany(c *fiber.Ctx) error {
+	mobileCode := c.Params("mobile")
+	compCode := c.Query("comp_code")
+
+	// Check and verify the user authorization
+	//tokenValue := c.Locals("user")
+
+	//token := tokenValue.(*jwt.Token)
+
+	// if !ok {
+	// 	return c.Status(http.StatusInternalServerError).JSON(responses.AppResponse{
+	// 		Status:  http.StatusInternalServerError,
+	// 		Message: "Error",
+	// 		Data:    &fiber.Map{"data": "Token not found or has an invalid type in c.Locals"},
+	// 	})
+	// }
+
+	//claims := token.Claims.(jwt.MapClaims)
+
+	// if comp_code := claims["comp_code"]; comp_code != compCode {
+	// 	return c.Status(http.StatusUnauthorized).JSON(responses.AppResponse{
+	// 		Status:  http.StatusUnauthorized,
+	// 		Message: "Error",
+	// 		Data:    &fiber.Map{"data": "You are not authorized to access the other vendor details"},
+	// 	})
+	// }
+
+	// Fetch company details
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	var company models.Company
+	err := companyCollection.FindOne(ctx, bson.M{"mobile": mobileCode, "comp_code": compCode}).Decode(&company)
+
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(responses.AppResponse{
+			Status:  http.StatusInternalServerError,
+			Message: "Error retrieving company details",
+			Data:    &fiber.Map{"data": err.Error()},
+		})
+	}
+
+	return c.Status(http.StatusOK).JSON(responses.AppResponse{
+		Status:  http.StatusOK,
+		Message: "success",
+		Data:    &fiber.Map{"data": company},
 	})
 }
 
